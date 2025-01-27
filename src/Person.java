@@ -1,13 +1,13 @@
-import java.util.Objects;
 import java.util.Calendar;
 import java.util.Objects;
 
+
 public class Person {
-    private  String IDNum;
+    private String IDNum;
     private String firstName;
-    private  String lastName;
-    private  String title;
-    private  int YOB;
+    private String lastName;
+    private String title;
+    private int YOB;
     static private int IDSeed = 1;
 
     public static int getIDSeed() {
@@ -26,7 +26,7 @@ public class Person {
         this.title = title;
         this.YOB = YOB;
     }
-    //////need arguments for date range!!!
+
 
 
     public Person(String firstName, String lastName, String title, int YOB) {
@@ -40,8 +40,7 @@ public class Person {
     // generate missing fields.
     private String genIDNum() {
         String newID = "" + IDSeed;
-        while(newID.length() < 8)
-        {
+        while (newID.length() < 8) {
             newID = "0" + newID;
         }
 
@@ -50,97 +49,92 @@ public class Person {
         return newID;
     }
 
-        // getters/setters
+    // getters/setters
 
-        public String getIDNum() {
+    public String getIDNum() {
         return IDNum;
     }
 
-        public void setIDNum(String IDNum) {
-            this.IDNum = IDNum;
-        }
+    public void setIDNum(String IDNum) {
+        this.IDNum = IDNum;
+    }
 
-        public String getFirstName() {
-            return firstName;
-        }
+    public String getFirstName() {
+        return firstName;
+    }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        public String getLastName() {
-            return lastName;
-        }
+    public String getLastName() {
+        return lastName;
+    }
 
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-        public String getTitle(String title) { return title; }
+    public String getTitle(String title) {
+        return title;
+    }
 
-        public void setTitle(String title) {this.title = title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-        public int getYOB() {
-            return YOB;
-        }
+    public int getYOB() {
+        return YOB;
+    }
 
-        public void setYOB(int YOB) {
-            this.YOB = YOB;
-        }
+    public void setYOB(int YOB) {
+        this.YOB = YOB;
+    }
 
 
-        // additional methods
-    public String fullName()
-    {
+    // additional methods
+    public String fullName() {
         return firstName + " " + lastName;
     }
 
-    public String formalName()
-    {
-        return title + fullName();
+    public String formalName() {
+        return title + " " + fullName();
     }
 
-    public int getAge()
-    {
+    public int getAge() {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         return currentYear - YOB;
     }
 
-    public int getAge(int year)
-    {
-        return year- YOB;
+    public int getAge(int year) {
+        return year - YOB;
 
     }
 
 
-    public String toCSVRecord()
-    {
-        return  this.IDNum + ", " + this.firstName + "," + this.lastName + "," + this.title + "," YOB;
+    public String toCSVRecord() {
+        return this.IDNum + ", " + this.firstName + "," + this.lastName + "," + this.title + "," + this.YOB;
 
     }
 
-
-    public String toJSONRecord()
-    {
+    public String toJSONRecord() {
         String retString = "";
         char DQ = '\u0022';  // Assign the double quote char to a variable
-        retString =  "{" + DQ + "IDNum" + DQ + ":" + DQ + this.IDNum + DQ + ",";
+        retString = "{" + DQ + "IDNum" + DQ + ":" + DQ + this.IDNum + DQ + ",";
         retString += DQ + "firstName" + DQ + ":" + DQ + this.firstName + DQ + ",";
-        retString += " " + DQ + "lastName"  + DQ + ":" + DQ + this.lastName + DQ + ",";
-        retString += " " + DQ + "title" + DQ + ":" + DQ + this.title + DQ + "}";
-        retString += " " + DQ + "YOB"  + DQ + ":" + this.YOB + "}";
+        retString += " " + DQ + "lastName" + DQ + ":" + DQ + this.lastName + DQ + ",";
+        retString += " " + DQ + "title" + DQ + ":" + DQ + this.title + DQ + ",";
+        retString += " " + DQ + "YOB" + DQ + ":" + this.YOB + "}";
 
         return retString;
     }
 
-    public String toXMLRecord()
-    {
+    public String toXMLRecord() {
         String retString = "";
-
-        retString = "<Person>" + "<IDNum>" + this.IDNum + "</IDNum>";
+        retString = "<Person>" + this.IDNum + "</IDNum>";
         retString += "<firstName>" + this.firstName + "</firstName>";
         retString += "<lastName>" + this.lastName + "</lastName>";
-        retString retString += "<title>" + this.title + "</title>";
+        retString += "<title>" + this.title + "</title>";
         retString += "<YOB>" + this.YOB + "</YOB></Person>";
 
         return retString;
@@ -169,6 +163,7 @@ public class Person {
     public int hashCode() {
         return Objects.hash(IDNum, firstName, lastName, title, YOB);
     }
+
 
 }
 

@@ -30,7 +30,7 @@ public class PersonGenerator {
          firstName = SafeInput.getNonZeroLenString(in, "Enter the First Name ");
          lastName = SafeInput.getNonZeroLenString(in, "Enter the Last Name ");
          title = SafeInput.getNonZeroLenString(in, "Enter the Title ");
-         YOB = SafeInput.getRangedInt (in, "Enter the year of birth ", 1000, 9999);
+         YOB = SafeInput.getRangedInt (in, "Enter the year of birth (1940-2010)", 1940, 2010);
 
          personRec = ID + "," + firstName + "," + lastName + "," + title +"," + YOB;
          folks.add(personRec);
@@ -68,8 +68,6 @@ public class PersonGenerator {
         {
             e.printStackTrace();
         }
-
-
 
     }
 }
