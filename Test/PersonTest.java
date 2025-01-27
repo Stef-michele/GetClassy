@@ -84,4 +84,28 @@ class PersonTest {
         // Test if p1 is not equal to null
         assertFalse(p1.equals(null));
     }
+    @Test
+    void testFullConstructor() {
+        // Arrange & Act
+        Person person = new Person("123456", "John", "Doe", "Mr.", 1985);
+
+        // Assert
+        assertEquals("John", person.getFirstName());  // Ensure firstName is correct
+        assertEquals("Doe", person.getLastName());    // Ensure lastName is correct
+        assertEquals("123456", person.getIDNum());        // Ensure ID is correct
+        assertEquals("Mr.", person.getTitle());       // Ensure title is correct
+        assertEquals(1985, person.getYOB());          // Ensure Year of Birth is correct
+    }
+    @Test
+    void testOverloadedConstructor() {
+        // Arrange & ActgetTitle
+        Person person = new Person("Jane", "Smith", "Ms.", 1990);
+
+        // Assert
+        assertNotNull(person.getIDNum());  // Ensure ID was automatically generated
+        assertEquals("Jane", person.getFirstName());  // Ensure firstName is correct
+        assertEquals("Smith", person.getLastName());  // Ensure lastName is correct
+        assertEquals("Ms.", person.getTitle());       // Ensure title is correct
+        assertEquals(1990, person.getYOB());          // Ensure Year of Birth is correct
+    }
 }

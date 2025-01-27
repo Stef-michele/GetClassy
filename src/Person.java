@@ -75,7 +75,7 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getTitle(String title) {
+    public String getTitle() {
         return title;
     }
 
