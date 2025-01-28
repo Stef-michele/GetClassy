@@ -12,7 +12,7 @@ public class PersonGenerator {
     public static void main(String[] args)
 
     {
-        ArrayList<String> folks = new ArrayList<>();
+        ArrayList<Person> folks = new ArrayList<>();
         Scanner in = new Scanner(System.in);
         File workingDirectory = new File(System.getProperty("user.dir"));
         Path file = Paths.get(workingDirectory.getPath() + "\\src\\personData.txt");
@@ -32,14 +32,17 @@ public class PersonGenerator {
          title = SafeInput.getNonZeroLenString(in, "Enter the Title ");
          YOB = SafeInput.getRangedInt (in, "Enter the year of birth (1940-2010)", 1940, 2010);
 
-         personRec = ID + "," + firstName + "," + lastName + "," + title +"," + YOB;
-         folks.add(personRec);
+         // Create a Person object and add it to the ArrayList<Person>
+         Person person = new Person(ID, firstName, lastName, title, YOB);
+         folks.add(person);
+
 
          done = SafeInput.getYNConfirm(in, "Are you done?");
 
+
      } while(!done);
 
-     for (String p: folks)
+     for (Person p: folks)
          System.out.println(p);
 
         try
@@ -53,14 +56,13 @@ public class PersonGenerator {
 
             // Finally can write the file LOL!
 
-            for(String rec : folks)
+            for(Person person : folks)
             {
-                writer.write(rec, 0, rec.length());  // stupid syntax for write rec
-                // 0 is where to start (1st char) the write
-                // rec. length() is how many chars to write (all)
-                writer.newLine();  // adds the new line
-
+                writer.write(person.toCSVRecord()); // Use toCSVRecord() from the Person class
+                writer.newLine();  // Adds a new line after each record
             }
+
+
             writer.close(); // must close the file to seal it and flush buffer
             System.out.println("Data file written!");
         }

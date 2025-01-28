@@ -113,8 +113,8 @@ public class Person {
 
 
     public String toCSVRecord() {
-        return this.IDNum + ", " + this.firstName + "," + this.lastName + "," + this.title + "," + this.YOB;
-
+        // Format fields in the correct comma-separated format
+        return String.format("%s,%s,%s,%s,%d",IDNum,firstName,lastName,title,YOB);
     }
 
     public String toJSONRecord() {

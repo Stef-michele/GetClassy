@@ -12,7 +12,7 @@ public class ProductWriter {
     public static void main(String[] args)
 
     {
-        ArrayList<String> products = new ArrayList<>();
+        ArrayList<Product> products = new ArrayList<>();
         Scanner in = new Scanner(System.in);
         File workingDirectory = new File(System.getProperty("user.dir"));
         Path file = Paths.get(workingDirectory.getPath() + "\\src\\ProductTestData.txt");
@@ -30,44 +30,34 @@ public class ProductWriter {
             Description = SafeInput.getNonZeroLenString(in, "Enter Description ");
             Cost = SafeInput.getDouble (in, "Enter Item Cost");
 
-            productRec = productID + "," + Name + "," + Description + "," + Cost;
-            products.add(productRec);
+            Product product = new Product(productID, Name, Description, Cost);
+            products.add(product);
 
             done = SafeInput.getYNConfirm(in, "Are you done?");
 
         } while(!done);
 
-        for (String p: products)
+        for (Product p: products)
             System.out.println(p);
 
-        try
-        {
-            // Typical java pattern of inherited classes
-            // we wrap a BufferedWriter around a lower level BufferedOutputStream
+        try {
             OutputStream out =
                     new BufferedOutputStream(Files.newOutputStream(file, CREATE));
             BufferedWriter writer =
                     new BufferedWriter(new OutputStreamWriter(out));
 
-            // Finally can write the file LOL!
+        for (Product product : products) {
 
-            for(String prec : products)
-            {
-                writer.write(prec, 0, prec.length());  // stupid syntax for write rec
-                // 0 is where to start (1st char) the write
-                // rec. length() is how many chars to write (all)
-                writer.newLine();  // adds the new line
-
-            }
-            writer.close(); // must close the file to seal it and flush buffer
-            System.out.println("Data file written!");
+            writer.write(product.toCSVRecord());
+            writer.newLine(); // Add a new line after each product record
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-
+        writer.close(); // Close the writer to save the file
+        System.out.println("\nData file written successfully!");
+    } catch (IOException e) {
+        System.out.println("Error writing the data file.");
+        e.printStackTrace();
+    }
 
     }
 }
+

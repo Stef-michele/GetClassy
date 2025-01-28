@@ -8,95 +8,82 @@ import static java.lang.Double.parseDouble;
 import static java.nio.file.StandardOpenOption.CREATE;
 
 public class ProductReader {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
 
         JFileChooser chooser = new JFileChooser();
-        File selectedFile;
-        String prec = "";
-        ArrayList<String> lines = new ArrayList<>();
+        ArrayList<Product> products = new ArrayList<>(); // List to hold Product objects
+
+        final int FIELDS_LENGTH = 4; // Corrected to int since fields.length is an int
 
 
-        final double FIELDS_LENGTH = 4;
-
-        String productID, Name, Description;
-        double Cost;
-
-        try
-        {
-
-            // use the toolkit to get the current working directory of the IDE
-            // Not sure if the toolkit is thread safe...
+        try {
+            // Use JFileChooser to select the Product data file
             File workingDirectory = new File(System.getProperty("user.dir"));
-
             chooser.setCurrentDirectory(workingDirectory);
 
-            if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-            {
-                selectedFile = chooser.getSelectedFile();
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = chooser.getSelectedFile();
+                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+
                 Path file = selectedFile.toPath();
-                // Typical java pattern of inherited classes
-                // we wrap a BufferedWriter around a lower level BufferedOutputStream
-                InputStream in =
-                        new BufferedInputStream(Files.newInputStream(file, CREATE));
-                BufferedReader reader =
-                        new BufferedReader(new InputStreamReader(in));
 
-                // Finally we can read the file LOL!
-                int line = 0;  // if we want to keep track of the line numbers
-                while(reader.ready())
-                {
-                    prec = reader.readLine();
-                    lines.add(prec);  // read all the lines into memory in an array list
-                    line++;
-                    // echo to screen
-                    System.out.printf("\nLine %4d %-60s ", line, prec);
-                }
-                reader.close(); // must close the file to seal it and flush buffer
-                System.out.println("\n\nData file read!");
+                // Open file to read
+                InputStream in = new BufferedInputStream(Files.newInputStream(file, CREATE));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-                // Now process the lines in the arrayList
-                // Split the line into the fields by using split with a comma
-                // use trim to remove leading and trailing spaces
-                // Numbers need to be converted back to numberic values. Here only
-                // the last field year of birth yob is an int the rest are strings.
+                int lineNumber = 0; // Track line numbers
+                String prec;
 
-                String[] fields;
-                for(String l:lines)
-                {
-                    fields = l.split(","); // Split the record into the fields
+                while ((prec = reader.readLine()) != null) {
+                    lineNumber++;
 
-                    if(fields.length == FIELDS_LENGTH)
-                    {
-                        productID = fields[0].trim();
-                        Name = fields[1].trim();
-                        Description  = fields[2].trim();
-                        Cost       = parseDouble(fields[3].trim());
-                        System.out.printf("\n%6s%12s%30s%10s", productID, Name, Description, Cost);
-                    }
-                    else
-                    {
-                        System.out.println("Found a record that may be corrupt: ");
-                        System.out.println(l);
+                    String[] fields = prec.split(","); // Split the record into fields
+                    if (fields.length == FIELDS_LENGTH) {
+                        try {
+                            String productID = fields[0].trim();
+                            String Name = fields[1].trim();
+                            String Description = fields[2].trim();
+                            Double Cost = parseDouble(fields[3].trim()); // Parse the cost into double
+
+                            // Create a new Product and add it to the list
+                            Product product = new Product(productID, Name, Description, Cost);
+                            products.add(product);
+
+                            System.out.println("Line " + lineNumber + ": " + product);
+
+
+                        } catch (NumberFormatException e) {
+                            System.out.printf("Error parsing numeric field on line %d: %s%n", lineNumber, prec);
+                        }
+                    } else {
+                        // Invalid record format
+                        System.out.printf("Invalid record format on line %d: %s%n", lineNumber, prec);
                     }
                 }
+                reader.close(); // Close the reader when done
+                System.out.println("\n\nData file read successfully!");
 
+                // Display the reconstructed Product objects
+                System.out.println("Reconstructed Products from File:");
+                if (products.isEmpty()) {
+                    System.out.println("No products found");
+                } else {
+
+                for (Product product : products) {
+                    System.out.println(product); // Calls Product's toString() method
+                }
             }
-            else  // user closed the file dialog wihtout choosing
-            {
-                System.out.println("Failed to choose a file to process");
-                System.out.println("Run the program again!");
+            } else {
+                System.out.println("No file selected. Program will exit.");
                 System.exit(0);
             }
-        }  // end of TRY
-        catch (FileNotFoundException e)
-        {
-            System.out.println("File not found!!!");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file.");
             e.printStackTrace();
         }
     }
 }
+
